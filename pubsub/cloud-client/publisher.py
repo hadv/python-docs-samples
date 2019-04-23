@@ -75,7 +75,7 @@ def delete_topic(project_id, topic_name):
     # [END pubsub_delete_topic]
 
 
-def publish_messages(project_id, topic_name):
+def publish_messages(project_id, topic_name, data):
     """Publishes multiple messages to a Pub/Sub topic."""
     # [START pubsub_quickstart_publisher]
     # [START pubsub_publish]
@@ -89,8 +89,8 @@ def publish_messages(project_id, topic_name):
     # in the form `projects/{project_id}/topics/{topic_name}`
     topic_path = publisher.topic_path(project_id, topic_name)
 
-    for n in range(1, 10):
-        data = u'Message number {}'.format(n)
+    for n in range(1, 2):
+        # data = u'{"ID":1, "Status": "COMPLETED"}'
         # Data must be a bytestring
         data = data.encode('utf-8')
         # When you publish a message, the client returns a future.
@@ -240,6 +240,7 @@ if __name__ == '__main__':
     publish_parser = subparsers.add_parser(
         'publish', help=publish_messages.__doc__)
     publish_parser.add_argument('topic_name')
+    publish_parser.add_argument('data')
 
     publish_with_custom_attributes_parser = subparsers.add_parser(
         'publish-with-custom-attributes',
@@ -270,7 +271,7 @@ if __name__ == '__main__':
     elif args.command == 'delete':
         delete_topic(args.project_id, args.topic_name)
     elif args.command == 'publish':
-        publish_messages(args.project_id, args.topic_name)
+        publish_messages(args.project_id, args.topic_name, args.data)
     elif args.command == 'publish-with-custom-attributes':
         publish_messages_with_custom_attributes(
             args.project_id, args.topic_name)
